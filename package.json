@@ -1,0 +1,27 @@
+{
+  "name": "facebook-photo-selector",
+  "version": "0.0.1",
+  "description": "A Vanilla JS plugin to create a Facebook photo selector (based on https://github.com/cshold/jQuery-Facebook-Photo-Selector)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjsarfatti/facebook-photo-selector.git"
+  },
+  "keywords": [
+    "facebook",
+    "photo",
+    "image",
+    "selector",
+    "picker",
+    "opengraph"
+  ],
+  "author": "Manuele J Sarfatti",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mjsarfatti/facebook-photo-selector/issues"
+  },
+  "homepage": "https://github.com/mjsarfatti/facebook-photo-selector#readme"
+}
