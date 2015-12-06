@@ -18,10 +18,16 @@
     "picker",
     "opengraph"
   ],
-  "author": "Manuele J Sarfatti",
+  "author": "Manuele J Sarfatti (http://mjsarfatti.com)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mjsarfatti/facebook-photo-selector/issues"
   },
-  "homepage": "https://github.com/mjsarfatti/facebook-photo-selector#readme"
+  "homepage": "https://github.com/mjsarfatti/facebook-photo-selector#readme",
+  "devDependencies": {
+    "babel-core": "^6.3.13",
+    "babel-loader": "^6.2.0",
+    "babel-preset-es2015": "^6.3.13",
+    "webpack": "^1.12.9"
+  }
 }
