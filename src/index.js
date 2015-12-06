@@ -1,9 +1,20 @@
 import DOM from './DOM';
 
 class facebookPhotoSelector {
-	init() {
-		console.log(DOM);
+
+	$() {
+		return DOM;
+	}
+
+	talk(message) {
+		console.log(`Saying: ${message}`);
+	}
+
+	hc(element) {
+		console.log(DOM.hasClass(element, 'class'));
 	}
 }
 
-export default facebookPhotoSelector;
+module.exports = {
+	facebookPhotoSelector
+};

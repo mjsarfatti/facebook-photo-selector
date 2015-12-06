@@ -58,10 +58,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
 	var _DOM = __webpack_require__(1);
 
 	var _DOM2 = _interopRequireDefault(_DOM);
@@ -76,16 +72,28 @@ return /******/ (function(modules) { // webpackBootstrap
 		}
 
 		_createClass(facebookPhotoSelector, [{
-			key: 'toString',
-			value: function toString() {
-				return 'Hello visitor';
+			key: '$',
+			value: function $() {
+				return _DOM2.default;
+			}
+		}, {
+			key: 'talk',
+			value: function talk(message) {
+				console.log('Saying: ' + message);
+			}
+		}, {
+			key: 'hc',
+			value: function hc(element) {
+				console.log(_DOM2.default.hasClass(element, 'class'));
 			}
 		}]);
 
 		return facebookPhotoSelector;
 	})();
 
-	exports.default = facebookPhotoSelector;
+	module.exports = {
+		facebookPhotoSelector: facebookPhotoSelector
+	};
 
 /***/ },
 /* 1 */
@@ -98,6 +106,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	function _elize(element) {
 		return typeof element === 'string' ? document.querySelector(element) : element;
+	}
+
+	function ready(fn) {
+		if (document.readyState != 'loading') {
+			fn();
+		} else {
+			document.addEventListener('DOMContentLoaded', fn);
+		}
 	}
 
 	function addClass(element, className) {
@@ -138,6 +154,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	exports.default = {
+		ready: ready,
 		addClass: addClass,
 		removeClass: removeClass,
 		hasClass: hasClass,
