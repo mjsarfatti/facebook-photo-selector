@@ -945,13 +945,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	facebookPhotoSelector._defaultSettings = {
 		// generic
-		speed: 100,
 		debug: false,
 
 		// originale "instance" settings
 		maxSelection: 1,
 		albumsPerPage: 6,
-		photosPerPage: 10,
+		photosPerPage: 500,
 		autoDeselection: true, // Allow the user to keep on selecting once they reach maxSelection, and just deselect the first selected photo
 		callbackAlbumSelected: null,
 		callbackAlbumUnselected: null,
