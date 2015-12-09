@@ -139,10 +139,11 @@ return /******/ (function(modules) { // webpackBootstrap
 				input = input.sort(this._sortPhotos);
 
 				//albums = []; do we need this here? :|
-				for (var i = 0; i < input.length; i++) {
-					//albums[albums.length] = input[i];
-					this._albums.push(input[i]);
-				}
+				/*for (var i = 0; i < input.length; i++) {
+	   	//albums[albums.length] = input[i];
+	   	this._albums.push(input[i]);
+	   }*/
+				this._albums = input;
 			}
 
 			/**
