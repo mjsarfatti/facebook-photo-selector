@@ -307,7 +307,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					this.$selectedCountMax.textContent = this._settings.maxSelection;
 					this._updatePhotosContainer(1);
 					// _updatePaginationButtons(1);
-					_DOM2.default.fadeIn(this.$container);
+					//DOM.fadeIn(this.$container);
 					if (typeof callback === 'function') {
 						callback();
 					}
