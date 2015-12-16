@@ -1,6 +1,6 @@
 {
   "name": "facebook-photo-selector",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A Vanilla JS plugin to create a Facebook photo selector (based on https://github.com/cshold/jQuery-Facebook-Photo-Selector)",
   "main": "build/facebook-photo-selector.js",
   "scripts": {
