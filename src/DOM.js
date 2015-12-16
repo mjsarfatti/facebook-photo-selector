@@ -147,7 +147,7 @@ function fadeOut(element) {
 	if ( ! element) return;
 
 	if (_ie && _ie < 10) {
-		element.addAttribute('hidden');
+		element.setAttribute('hidden');
 		return;
 	}
 
@@ -205,7 +205,7 @@ function slideOutRight(element) {
 	if ( ! element) return;
 
 	if (_ie && _ie < 10) {
-		element.addAttribute('hidden');
+		element.setAttribute('hidden');
 		return;
 	}
 

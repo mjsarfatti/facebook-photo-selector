@@ -1142,7 +1142,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		if (!element) return;
 
 		if (_ie && _ie < 10) {
-			element.addAttribute('hidden');
+			element.setAttribute('hidden');
 			return;
 		}
 
@@ -1200,7 +1200,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		if (!element) return;
 
 		if (_ie && _ie < 10) {
-			element.addAttribute('hidden');
+			element.setAttribute('hidden');
 			return;
 		}
 
