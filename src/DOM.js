@@ -82,6 +82,9 @@ function css(element, rule) {
 }
 
 // ANIMATIONS
+var _ie = /MSIE ([0-9]+)/g.exec(window.navigator.userAgent) ?
+	/MSIE ([0-9]+)/g.exec(window.navigator.userAgent)[1] :
+	undefined;
 
 function show(element) {
 	if ( ! element) return;
@@ -113,6 +116,12 @@ function hide(element) {
 
 function fadeIn(element) {
 	if ( ! element) return;
+
+	if (_ie && _ie < 10) {
+		element.removeAttribute('hidden');
+		return;
+	}
+
 	_setUpAnimationStylesheet();
 	element = _elize(element);
 
@@ -136,6 +145,12 @@ function fadeIn(element) {
 
 function fadeOut(element) {
 	if ( ! element) return;
+
+	if (_ie && _ie < 10) {
+		element.addAttribute('hidden');
+		return;
+	}
+
 	_setUpAnimationStylesheet();
 	element = _elize(element);
 
@@ -159,6 +174,12 @@ function fadeOut(element) {
 
 function slideInRight(element) {
 	if ( ! element) return;
+
+	if (_ie && _ie < 10) {
+		element.removeAttribute('hidden');
+		return;
+	}
+
 	_setUpAnimationStylesheet();
 	element = _elize(element);
 
@@ -182,6 +203,12 @@ function slideInRight(element) {
 
 function slideOutRight(element) {
 	if ( ! element) return;
+
+	if (_ie && _ie < 10) {
+		element.addAttribute('hidden');
+		return;
+	}
+
 	_setUpAnimationStylesheet();
 	element = _elize(element);
 

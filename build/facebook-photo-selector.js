@@ -77,6 +77,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var facebookPhotoSelector = exports.facebookPhotoSelector = (function () {
 		function facebookPhotoSelector(settings) {
+			var _this = this;
+
 			_classCallCheck(this, facebookPhotoSelector);
 
 			// variables
@@ -120,6 +122,55 @@ return /******/ (function(modules) { // webpackBootstrap
 			this.$buttonCancel = this.$container.querySelector(this._settings.buttonCancelSelector);
 			this.$loader = this.$container.querySelector(this._settings.loader);
 			this.$pagination = this.$container.querySelectorAll(this._settings.pagination);
+
+			// events
+			this._eventButtonClose = function (e) {
+				e.preventDefault();
+				_this.hideAlbumSelector();
+			};
+			this._eventButtonCancel = function (e) {
+				e.preventDefault();
+				_this.hideAlbumSelector();
+			};
+			this._eventButtonOK = function (e) {
+				e.preventDefault();
+				_this.hideAlbumSelector();
+				if (typeof _this._settings.callbackSubmit === 'function') {
+					_this._settings.callbackSubmit(_this._selectedPhotoIds);
+				}
+			};
+			this._eventBackToAlbums = function (e) {
+				e.preventDefault();
+				_DOM2.default.show(_this.$pagination);
+				_DOM2.default.hide(_this.$buttonOK);
+				_this.hidePhotoSelector();
+			};
+			this._eventPagePrev = function (e) {
+				e.preventDefault();
+				var pageNumber = parseInt(_this.$pageNumber.textContent, 10) - 1;
+				if (pageNumber < 1) {
+					return;
+				}
+				_this._updateAlbumContainer(pageNumber);
+				_this._updatePaginationButtons(pageNumber);
+			};
+			this._eventPageNext = function (e) {
+				var pageNumber = parseInt(_this.$pageNumber.textContent, 10) + 1;
+				e.preventDefault();
+				if (_DOM2.default.hasClass(e.target, _this._settings.disabledClass)) {
+					return;
+				}
+				_this._updateAlbumContainer(pageNumber);
+				_this._updatePaginationButtons(pageNumber);
+			};
+			this._eventWindowEscape = function (e) {
+				if (e.which === 27) {
+					// The escape key has the same effect as the close button
+					e.preventDefault();
+					e.stopPropagation();
+					_this.hideAlbumSelector();
+				}
+			};
 		}
 
 		/**
@@ -211,6 +262,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'getPhotoById',
 			value: function getPhotoById(id) {
+				if (!id) return null;
 				var i, len;
 				id = id.toString();
 				for (i = 0, len = this._photos.length; i < len; i += 1) {
@@ -233,7 +285,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'showAlbumSelector',
 			value: function showAlbumSelector(id, callback) {
-				var _this = this;
+				var _this2 = this;
 
 				var i, len;
 				this._log('CSPhotoSelector - show Albums');
@@ -242,7 +294,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				if (!this.$albums) {
 					return this._buildAlbumSelector(id, function () {
-						_this.showAlbumSelector(id, callback);
+						_this2.showAlbumSelector(id, callback);
 					});
 				} else {
 					this._bindEvents();
@@ -277,7 +329,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'showPhotoSelector',
 			value: function showPhotoSelector(callback, albumId) {
-				var _this2 = this;
+				var _this3 = this;
 
 				var i, len;
 				this._log('CSPhotoSelector - show Photos');
@@ -287,7 +339,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				if (!this.$photos || albumId) {
 					return this._buildPhotoSelector(function () {
-						_this2.showPhotoSelector(callback);
+						_this3.showPhotoSelector(callback);
 					}, albumId);
 				} else {
 					// Update classnames to represent the selections for this instance
@@ -396,21 +448,6 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 
 			/**
-	   * Listener for the ESC key
-	   */
-
-		}, {
-			key: '_windowEscapeListener',
-			value: function _windowEscapeListener(e) {
-				if (e.which === 27) {
-					// The escape key has the same effect as the close button
-					e.preventDefault();
-					e.stopPropagation();
-					this.hideAlbumSelector();
-				}
-			}
-
-			/**
 	   * Bind events to our UI controls
 	   * @return {void}
 	   */
@@ -418,53 +455,13 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: '_bindEvents',
 			value: function _bindEvents() {
-				var _this3 = this;
-
-				this.$buttonClose.addEventListener('click', function (e) {
-					e.preventDefault();
-					_this3.hideAlbumSelector();
-				});
-				this.$buttonCancel.addEventListener('click', function (e) {
-					e.preventDefault();
-					_this3.hideAlbumSelector();
-				});
-
-				this.$buttonOK.addEventListener('click', function (e) {
-					e.preventDefault();
-					_this3.hideAlbumSelector();
-					if (typeof _this3._settings.callbackSubmit === 'function') {
-						_this3._settings.callbackSubmit(_this3._selectedPhotoIds);
-					}
-				});
-
-				this.$backToAlbums.addEventListener('click', function (e) {
-					e.preventDefault();
-					_DOM2.default.show(_this3.$pagination);
-					_DOM2.default.hide(_this3.$buttonOK);
-					_this3.hidePhotoSelector();
-				});
-
-				this.$pagePrev.addEventListener('click', function (e) {
-					var pageNumber = parseInt(_this3.$pageNumber.textContent, 10) - 1;
-					e.preventDefault();
-					if (pageNumber < 1) {
-						return;
-					}
-					_this3._updateAlbumContainer(pageNumber);
-					_this3._updatePaginationButtons(pageNumber);
-				});
-
-				this.$pageNext.addEventListener('click', function (e) {
-					var pageNumber = parseInt(_this3.$pageNumber.textContent, 10) + 1;
-					e.preventDefault();
-					if (_DOM2.default.hasClass(e.target, _this3._settings.disabledClass)) {
-						return;
-					}
-					_this3._updateAlbumContainer(pageNumber);
-					_this3._updatePaginationButtons(pageNumber);
-				});
-
-				window.addEventListener('keydown', this._windowEscapeListener.bind(this));
+				this.$buttonClose.addEventListener('click', this._eventButtonClose);
+				this.$buttonCancel.addEventListener('click', this._eventButtonCancel);
+				this.$buttonOK.addEventListener('click', this._eventButtonOK);
+				this.$backToAlbums.addEventListener('click', this._eventBackToAlbums);
+				this.$pagePrev.addEventListener('click', this._eventPagePrev);
+				this.$pageNext.addEventListener('click', this._eventPageNext);
+				window.addEventListener('keydown', this._eventWindowEscape);
 			}
 
 			/**
@@ -475,18 +472,19 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: '_unbindEvents',
 			value: function _unbindEvents() {
-				this.$buttonClose.removeEventListener('click');
-				this.$buttonOK.removeEventListener('click');
-				this.$buttonCancel.removeEventListener('click');
-				[].forEach.call(this.$albumsContainer.children, function ($child) {
-					$child.removeEventListener('click');
-				});
-				[].forEach.call(this.$photosContainer.children, function ($child) {
-					$child.removeEventListener('click');
-				});
-				this.$pagePrev.removeEventListener('click');
-				this.$pageNext.removeEventListener('click');
-				window.removeEventListener('keydown', this._windowEscapeListener);
+				this.$buttonClose.removeEventListener('click', this._eventButtonClose);
+				this.$buttonCancel.removeEventListener('click', this._eventButtonCancel);
+				this.$buttonOK.removeEventListener('click', this._eventButtonOK);
+				this.$backToAlbums.removeEventListener('click', this._eventBackToAlbums);
+				/*[].forEach.call(this.$albumsContainer.children, ($child) => {
+	   	$child.removeEventListener('click', this.);
+	   });
+	   [].forEach.call(this.$photosContainer.children, ($child) => {
+	   	$child.removeEventListener('click', this._eventPageNext);
+	   });*/
+				this.$pagePrev.removeEventListener('click', this._eventPagePrev);
+				this.$pageNext.removeEventListener('click', this._eventPageNext);
+				window.removeEventListener('keydown', this._eventWindowEscape);
 			}
 
 			/**
@@ -1081,6 +1079,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	// ANIMATIONS
+	var _ie = /MSIE ([0-9]+)/g.exec(window.navigator.userAgent) ? /MSIE ([0-9]+)/g.exec(window.navigator.userAgent)[1] : undefined;
 
 	function show(element) {
 		if (!element) return;
@@ -1112,6 +1111,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function fadeIn(element) {
 		if (!element) return;
+
+		if (_ie && _ie < 10) {
+			element.removeAttribute('hidden');
+			return;
+		}
+
 		_setUpAnimationStylesheet();
 		element = _elize(element);
 
@@ -1135,6 +1140,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function fadeOut(element) {
 		if (!element) return;
+
+		if (_ie && _ie < 10) {
+			element.addAttribute('hidden');
+			return;
+		}
+
 		_setUpAnimationStylesheet();
 		element = _elize(element);
 
@@ -1158,6 +1169,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function slideInRight(element) {
 		if (!element) return;
+
+		if (_ie && _ie < 10) {
+			element.removeAttribute('hidden');
+			return;
+		}
+
 		_setUpAnimationStylesheet();
 		element = _elize(element);
 
@@ -1181,6 +1198,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function slideOutRight(element) {
 		if (!element) return;
+
+		if (_ie && _ie < 10) {
+			element.addAttribute('hidden');
+			return;
+		}
+
 		_setUpAnimationStylesheet();
 		element = _elize(element);
 

@@ -46,6 +46,51 @@ export class facebookPhotoSelector {
 		this.$buttonCancel      = this.$container.querySelector(this._settings.buttonCancelSelector);
 		this.$loader            = this.$container.querySelector(this._settings.loader);
 		this.$pagination        = this.$container.querySelectorAll(this._settings.pagination);
+
+		// events
+		this._eventButtonClose = (e) => {
+			e.preventDefault();
+			this.hideAlbumSelector();
+		};
+		this._eventButtonCancel = (e) => {
+			e.preventDefault();
+			this.hideAlbumSelector();
+		};
+		this._eventButtonOK = (e) => {
+			e.preventDefault();
+			this.hideAlbumSelector();
+			if (typeof this._settings.callbackSubmit === 'function') {
+				this._settings.callbackSubmit(this._selectedPhotoIds);
+			}
+		};
+		this._eventBackToAlbums = (e) => {
+			e.preventDefault();
+			DOM.show(this.$pagination);
+			DOM.hide(this.$buttonOK);
+			this.hidePhotoSelector();
+		};
+		this._eventPagePrev = (e) => {
+			e.preventDefault();
+			var pageNumber = parseInt(this.$pageNumber.textContent, 10) - 1;
+			if (pageNumber < 1) { return; }
+			this._updateAlbumContainer(pageNumber);
+			this._updatePaginationButtons(pageNumber);
+		};
+		this._eventPageNext = (e) => {
+			var pageNumber = parseInt(this.$pageNumber.textContent, 10) + 1;
+			e.preventDefault();
+			if (DOM.hasClass(e.target, this._settings.disabledClass)) { return; }
+			this._updateAlbumContainer(pageNumber);
+			this._updatePaginationButtons(pageNumber);
+		};
+		this._eventWindowEscape = (e) => {
+			if (e.which === 27) {
+				// The escape key has the same effect as the close button
+				e.preventDefault();
+				e.stopPropagation();
+				this.hideAlbumSelector();
+			}
+		};
 	}
 
 	/**
@@ -119,6 +164,7 @@ export class facebookPhotoSelector {
 	 * @return {object}    the corresponding Photo object
 	 */
 	getPhotoById(id) {
+		if (!id) return null;
 		var i, len;
 		id = id.toString();
 		for (i = 0, len = this._photos.length; i < len; i += 1) {
@@ -276,61 +322,17 @@ export class facebookPhotoSelector {
 		}
 
 		/**
-		 * Listener for the ESC key
-		 */
-		_windowEscapeListener(e) {
-			if (e.which === 27) {
-				// The escape key has the same effect as the close button
-				e.preventDefault();
-				e.stopPropagation();
-				this.hideAlbumSelector();
-			}
-		}
-
-		/**
 		 * Bind events to our UI controls
 		 * @return {void}
 		 */
 		_bindEvents() {
-			this.$buttonClose.addEventListener('click', (e) => {
-				e.preventDefault();
-				this.hideAlbumSelector();
-			});
-			this.$buttonCancel.addEventListener('click', (e) => {
-				e.preventDefault();
-				this.hideAlbumSelector();
-			});
-
-			this.$buttonOK.addEventListener('click', (e) => {
-				e.preventDefault();
-				this.hideAlbumSelector();
-				if (typeof this._settings.callbackSubmit === 'function') { this._settings.callbackSubmit(this._selectedPhotoIds); }
-			});
-
-			this.$backToAlbums.addEventListener('click', (e) => {
-				e.preventDefault();
-				DOM.show(this.$pagination);
-				DOM.hide(this.$buttonOK);
-				this.hidePhotoSelector();
-			});
-
-			this.$pagePrev.addEventListener('click', (e) => {
-				var pageNumber = parseInt(this.$pageNumber.textContent, 10) - 1;
-				e.preventDefault();
-				if (pageNumber < 1) { return; }
-				this._updateAlbumContainer(pageNumber);
-				this._updatePaginationButtons(pageNumber);
-			});
-
-			this.$pageNext.addEventListener('click', (e) => {
-				var pageNumber = parseInt(this.$pageNumber.textContent, 10) + 1;
-				e.preventDefault();
-				if (DOM.hasClass(e.target, this._settings.disabledClass)) { return; }
-				this._updateAlbumContainer(pageNumber);
-				this._updatePaginationButtons(pageNumber);
-			});
-
-			window.addEventListener('keydown', this._windowEscapeListener.bind(this));
+			this.$buttonClose.addEventListener('click', this._eventButtonClose);
+			this.$buttonCancel.addEventListener('click', this._eventButtonCancel);
+			this.$buttonOK.addEventListener('click', this._eventButtonOK);
+			this.$backToAlbums.addEventListener('click', this._eventBackToAlbums);
+			this.$pagePrev.addEventListener('click', this._eventPagePrev);
+			this.$pageNext.addEventListener('click', this._eventPageNext);
+			window.addEventListener('keydown', this._eventWindowEscape);
 		}
 
 		/**
@@ -338,18 +340,19 @@ export class facebookPhotoSelector {
 		 * @return {void}
 		 */
 		_unbindEvents() {
-			this.$buttonClose.removeEventListener('click');
-			this.$buttonOK.removeEventListener('click');
-			this.$buttonCancel.removeEventListener('click');
-			[].forEach.call(this.$albumsContainer.children, ($child) => {
-				$child.removeEventListener('click');
+			this.$buttonClose.removeEventListener('click', this._eventButtonClose);
+			this.$buttonCancel.removeEventListener('click', this._eventButtonCancel);
+			this.$buttonOK.removeEventListener('click', this._eventButtonOK);
+			this.$backToAlbums.removeEventListener('click', this._eventBackToAlbums);
+			/*[].forEach.call(this.$albumsContainer.children, ($child) => {
+				$child.removeEventListener('click', this.);
 			});
 			[].forEach.call(this.$photosContainer.children, ($child) => {
-				$child.removeEventListener('click');
-			});
-			this.$pagePrev.removeEventListener('click');
-			this.$pageNext.removeEventListener('click');
-			window.removeEventListener('keydown', this._windowEscapeListener);
+				$child.removeEventListener('click', this._eventPageNext);
+			});*/
+			this.$pagePrev.removeEventListener('click', this._eventPagePrev);
+			this.$pageNext.removeEventListener('click', this._eventPageNext);
+			window.removeEventListener('keydown', this._eventWindowEscape);
 		}
 
 		/**
